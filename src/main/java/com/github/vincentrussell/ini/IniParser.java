@@ -1,5 +1,6 @@
 package com.github.vincentrussell.ini;
 
+import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.mutable.MutableObject;
 
@@ -72,7 +73,36 @@ public class IniParser {
     }
 
     public Object getValue(final String section, final String key) {
-        return resultMap.getOrDefault(section, new HashMap<>()).get(key);
+        return getValue(section, key, Object.class);
+    }
+
+    public <T> T getValue(final String section, final String key, final Class<T> type) {
+        return cast(resultMap.getOrDefault(section, new HashMap<>()).get(key), type);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> T cast(Object o, Class<T> type) {
+        if (type.isInstance(o)) {
+            return (T) o;
+        } else if (o != null && ClassUtils.isPrimitiveWrapper(o.getClass())
+                && o.getClass().equals(ClassUtils.primitiveToWrapper(type))) {
+            return (T) o;
+        } else if (Number.class.isInstance(o)) {
+            if (Long.class.isAssignableFrom(type) || long.class.isAssignableFrom(type)) {
+                return (T) (Long) ((Number)o).longValue();
+            } else if (Integer.class.isAssignableFrom(type) || int.class.isAssignableFrom(type)) {
+                return (T) (Integer) ((Number)o).intValue();
+            } else if (Double.class.isAssignableFrom(type) || double.class.isAssignableFrom(type)) {
+                return (T) (Double) ((Number)o).doubleValue();
+            } else if (Float.class.isAssignableFrom(type) || float.class.isAssignableFrom(type)) {
+                return (T) (Float) ((Number)o).floatValue();
+            } else if (Short.class.isAssignableFrom(type) || short.class.isAssignableFrom(type)) {
+                return (T) (Short) ((Number)o).shortValue();
+            } else if (Byte.class.isAssignableFrom(type) || byte.class.isAssignableFrom(type)) {
+                return (T) (Byte) ((Number)o).byteValue();
+            }
+        }
+        return (T) o;
     }
 
     public Collection<String> getSections() {

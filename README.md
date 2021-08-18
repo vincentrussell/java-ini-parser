@@ -46,6 +46,15 @@ Add a dependency to `com.github.vincentrussell:java-ini-parser`.
  iniParser.getValue("String", "string")
 ```
 
+
+### Cast a number to a particular type
+
+Be careful!  Precision can be lost here.
+```
+ IniParser iniParser = new IniParser(new FileInputStream("samples/sample2.ini"));
+  iniParser.getValue("Numbers", "long", int.class)
+```
+
 # Change Log
 
 ## [1.0](https://github.com/vincentrussell/java-ini-parser/tree/java-ini-parser-1.0) (2021-08-17)

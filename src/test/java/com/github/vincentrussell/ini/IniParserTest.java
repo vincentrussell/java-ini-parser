@@ -22,6 +22,28 @@ public class IniParserTest {
         assertEquals(Long.valueOf(-32768), iniParser.getValue("Numbers", "short"));
     }
 
+    @Test
+    public void getAndSpecifyType() throws IOException {
+        IniParser iniParser = new IniParser(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/sample.ini"));
+        assertEquals(Double.valueOf(3.14), iniParser.getValue("Numbers", "double", Double.class));
+        assertEquals(Double.valueOf(3.14), iniParser.getValue("Numbers", "double", double.class));
+    }
+
+    @Test
+    public void getAndSpecifyTypeConvertNumber() throws IOException {
+        IniParser iniParser = new IniParser(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/sample.ini"));
+        assertEquals(Integer.valueOf(-32768), iniParser.getValue("Numbers", "short", int.class));
+        assertEquals(Double.valueOf(-32768), iniParser.getValue("Numbers", "short", double.class));
+        assertEquals(Float.valueOf(-32768), iniParser.getValue("Numbers", "short", float.class));
+    }
+
+    @Test
+    public void getAndSpecifyTypeConvertNumber2() throws IOException {
+        IniParser iniParser = new IniParser(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/sample.ini"));
+        //loss of precision
+        assertEquals(Integer.valueOf(-858695232), iniParser.getValue("Numbers", "long", int.class));
+    }
+
 
     @Test
     public void getStrings() throws IOException {
