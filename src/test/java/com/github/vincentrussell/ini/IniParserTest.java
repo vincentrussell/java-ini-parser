@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.*;
@@ -90,6 +91,6 @@ public class IniParserTest {
 
     @Test(expected = FileNotFoundException.class)
     public void nullInputStream() throws IOException {
-        new IniParser(null);
+        new IniParser((InputStream) null);
     }
 }
