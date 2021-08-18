@@ -29,30 +29,36 @@ Add a dependency to `com.github.vincentrussell:java-ini-parser`.
 
 ```
  IniParser iniParser = new IniParser(new FileInputStream("samples/sample2.ini"));
- iniParser.getSections();
+ Collection<String> sections = iniParser.getSections();
 ```
 
 ### Get the keys
 
 ```
  IniParser iniParser = new IniParser(new FileInputStream("samples/sample2.ini"));
- iniParser.getKeys("FTPS")
+ Collection<String> keys = iniParser.getKeys("FTPS")
 ```
 
 ### Get a value
 
 ```
  IniParser iniParser = new IniParser(new FileInputStream("samples/sample2.ini"));
- iniParser.getValue("String", "string")
+ Object value = iniParser.getValue("String", "string")
 ```
 
+### Get a section as Map
+
+```
+ IniParser iniParser = new IniParser(new FileInputStream("samples/sample2.ini"));
+ Map<String, Object> value = iniParser.getSection("FTP")
+```
 
 ### Cast a number to a particular type
 
 Be careful!  Precision can be lost here.
 ```
  IniParser iniParser = new IniParser(new FileInputStream("samples/sample2.ini"));
-  iniParser.getValue("Numbers", "long", int.class)
+  int value = iniParser.getValue("Numbers", "long", int.class)
 ```
 
 # Change Log

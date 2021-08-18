@@ -112,4 +112,8 @@ public class IniParser {
     public Collection<String> getKeys(String section) {
         return resultMap.getOrDefault(section, new HashMap<>()).keySet();
     }
+
+    public Map<String, Object> getSection(final String section) {
+        return resultMap.get(section);
+    }
 }

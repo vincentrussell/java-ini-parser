@@ -1,5 +1,6 @@
 package com.github.vincentrussell.ini;
 
+import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
@@ -63,6 +64,21 @@ public class IniParserTest {
     public void getSections() throws IOException {
         IniParser iniParser = new IniParser(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/sample2.ini"));
         assertThat(iniParser.getSections(), containsInAnyOrder("FTPS", "FTP", "HTTPS", "BACKUP_SERVERS", "SNMP", "TFTP", "HTTP", "Settings"));
+    }
+
+    @Test
+    public void getSectionAsMap() throws IOException {
+        IniParser iniParser = new IniParser(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/sample2.ini"));
+        assertEquals(iniParser.getSection("FTP"), ImmutableMap.<String, Object>builder()
+                .put("FTPDir", "/opt/ecs/mvuser/MV_IPTel/data/FTPdata")
+                .put("SUUserName", "mvuser")
+                .put("SUPassword", "Avaya")
+                .put("RunFTP", 1L)
+                .put("EnableSU", 1L)
+                .put("FTPPort", 21L)
+                .put("FTPDataPort", 20L)
+                .put("FTP_TimeOut", 5L)
+                .build());
     }
 
     @Test
