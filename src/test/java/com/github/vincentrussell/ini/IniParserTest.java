@@ -46,6 +46,18 @@ public class IniParserTest {
         assertEquals(Integer.valueOf(-858695232), iniParser.getValue("Numbers", "long", int.class));
     }
 
+    @Test
+    public void getNumbersAsString() throws IOException {
+        IniParser iniParser = new IniParser(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/sample.ini"));
+        assertEquals("3.14", iniParser.getValue("Numbers", "double", String.class));
+        assertEquals("3.14", iniParser.getValue("Numbers", "double2", String.class));
+        assertEquals("199.33", iniParser.getValue("Numbers", "float", String.class));
+        assertEquals("404", iniParser.getValue("Numbers", "integer", String.class));
+        assertEquals("922337203685775808", iniParser.getValue("Numbers", "long", String.class));
+        assertEquals("922337203685775808", iniParser.getValue("Numbers", "long2", String.class));
+        assertEquals("-32768", iniParser.getValue("Numbers", "short", String.class));
+    }
+
 
     @Test
     public void getStrings() throws IOException {

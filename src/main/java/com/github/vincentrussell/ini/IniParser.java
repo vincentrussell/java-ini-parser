@@ -124,6 +124,8 @@ public class IniParser {
     private <T> T cast(Object o, Class<T> type) {
         if (type.isInstance(o)) {
             return (T) o;
+        } else if (String.class.equals(type)) {
+            return (T) o.toString();
         } else if (o != null && ClassUtils.isPrimitiveWrapper(o.getClass())
                 && o.getClass().equals(ClassUtils.primitiveToWrapper(type))) {
             return (T) o;
@@ -139,7 +141,7 @@ public class IniParser {
             } else if (Short.class.isAssignableFrom(type) || short.class.isAssignableFrom(type)) {
                 return (T) (Short) ((Number)o).shortValue();
             } else if (Byte.class.isAssignableFrom(type) || byte.class.isAssignableFrom(type)) {
-                return (T) (Byte) ((Number)o).byteValue();
+                return (T) (Byte) ((Number) o).byteValue();
             }
         }
         return (T) o;
