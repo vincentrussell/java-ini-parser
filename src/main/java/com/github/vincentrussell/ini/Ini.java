@@ -180,4 +180,14 @@ public class Ini {
     public Map<String, Object> getSection(final String section) {
         return resultMap.get(section);
     }
+
+    /**
+     * store new values in the ini
+     * @param section the desired section
+     * @param key the key in the section
+     * @param value the value to store for that key
+     */
+    public void putValue(final String section, final String key, final Object value) {
+        resultMap.computeIfAbsent(section, s -> new HashMap<>()).put(key, value);
+    }
 }

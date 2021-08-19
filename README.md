@@ -67,6 +67,13 @@ Be careful!  Precision can be lost here.
  int value = ini.getValue("Numbers", "long", int.class)
 ```
 
+### Put a value
+
+```
+ Ini ini = new Ini();
+ ini.putValue("section", "key", "value")
+```
+
 # Change Log
 
 ## [1.0](https://github.com/vincentrussell/java-ini-parser/tree/java-ini-parser-1.0) (2021-08-17)

@@ -73,6 +73,16 @@ public class IniTest {
     }
 
     @Test
+    public void putValues() throws IOException {
+        Ini ini = new Ini();
+        ini.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/sample.ini"));
+        ini.putValue("String", "newString", "Hello2");
+        ini.putValue("Numbers", "double2", Double.valueOf("3.1455"));
+        assertEquals("Hello2", ini.getValue("String", "newString"));
+        assertEquals(Double.valueOf("3.1455"), ini.getValue("Numbers", "double2"));
+    }
+
+    @Test
     public void sectionNotFound() throws IOException {
         Ini ini = new Ini();
         ini.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/sample.ini"));
