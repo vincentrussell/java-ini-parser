@@ -20,7 +20,8 @@ Add a dependency to `com.github.vincentrussell:java-ini-parser`.
 ## Running it from Java
 
 ```
- IniParser iniParser = new IniParser(new FileInputStream("samples/sample2.ini"));
+ Ini ini = new Ini();
+ ini.load(new FileInputStream("samples/sample2.ini");
 ```
 
 ## Available options
@@ -28,37 +29,42 @@ Add a dependency to `com.github.vincentrussell:java-ini-parser`.
 ### Get the sections
 
 ```
- IniParser iniParser = new IniParser(new FileInputStream("samples/sample2.ini"));
- Collection<String> sections = iniParser.getSections();
+ Ini ini = new Ini();
+ ini.load(new FileInputStream("samples/sample2.ini"));
+ Collection<String> sections = ini.getSections();
 ```
 
 ### Get the keys
 
 ```
- IniParser iniParser = new IniParser(new FileInputStream("samples/sample2.ini"));
- Collection<String> keys = iniParser.getKeys("FTPS")
+ Ini ini = new Ini();
+ ini.load(new FileInputStream("samples/sample2.ini"));
+ Collection<String> keys = ini.getKeys("FTPS")
 ```
 
 ### Get a value
 
 ```
- IniParser iniParser = new IniParser(new FileInputStream("samples/sample2.ini"));
- Object value = iniParser.getValue("String", "string")
+ Ini ini = new Ini();
+ ini.load(new FileInputStream("samples/sample2.ini"));
+ Object value = ini.getValue("String", "string")
 ```
 
 ### Get a section as Map
 
 ```
- IniParser iniParser = new IniParser(new FileInputStream("samples/sample2.ini"));
- Map<String, Object> value = iniParser.getSection("FTP")
+ Ini ini = new Ini();
+ ini.load(new FileInputStream("samples/sample2.ini"));
+ Map<String, Object> value = ini.getSection("FTP")
 ```
 
 ### Cast a number to a particular type
 
 Be careful!  Precision can be lost here.
 ```
- IniParser iniParser = new IniParser(new FileInputStream("samples/sample2.ini"));
-  int value = iniParser.getValue("Numbers", "long", int.class)
+ Ini ini = new Ini();
+ ini.load(new FileInputStream("samples/sample2.ini"));
+ int value = ini.getValue("Numbers", "long", int.class)
 ```
 
 # Change Log

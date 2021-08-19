@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 /**
  * This class is responsible for converting input streams into maps of maps that represent ini files.
  */
-public class IniParser {
+public class Ini {
 
     private static final String NO_SECTION = "_NO_SECTION";
     private static Pattern SECTION_PATTERN  = Pattern.compile( "\\s*\\[([^]]*)\\]\\s*" );
@@ -26,12 +26,20 @@ public class IniParser {
 
     private Map<String, Map<String, Object>> resultMap = new HashMap<>();
 
+
+    /**
+     * default constructor
+     */
+    public Ini() {
+
+    }
+
     /**
      * default constructor with an {@link InputStream}
-     * @param inputStream
+     * @param inputStream the ini file as an input stream
      * @throws IOException
      */
-    public IniParser(final InputStream inputStream) throws IOException {
+    public void load(final InputStream inputStream) throws IOException {
         if (inputStream == null) {
             throw new FileNotFoundException("inputStream is null");
         }
@@ -44,20 +52,20 @@ public class IniParser {
 
     /**
      * default constructor with {@link File}
-     * @param file
+     * @param file the ini file
      * @throws IOException
      */
-    public IniParser(final File file) throws IOException {
-        this(new FileInputStream(file));
+    public void load(final File file) throws IOException {
+        load(new FileInputStream(file));
     }
 
     /**
      * default constructor with {@link String}
-     * @param string
+     * @param string the contents of the ini file
      * @throws IOException
      */
-    public IniParser(final String string) throws  IOException {
-        this(new ByteArrayInputStream(string.getBytes(StandardCharsets.UTF_8)));
+    public void load(final String string) throws  IOException {
+        load(new ByteArrayInputStream(string.getBytes(StandardCharsets.UTF_8)));
     }
 
     private void parseIniFile(final MutableObject<String> section,
@@ -100,8 +108,8 @@ public class IniParser {
 
     /**
      * return a value from the nested structure as an object
-     * @param section
-     * @param key
+     * @param section the desired section
+     * @param key the desired key in the section
      * @return
      */
     public Object getValue(final String section, final String key) {
@@ -110,10 +118,10 @@ public class IniParser {
 
     /**
      * return a value from the nested structure and cast it to the specified type.
-     * @param section
-     * @param key
-     * @param type
-     * @param <T>
+     * @param section the desired section
+     * @param key the key in the section
+     * @param type the desired type
+     * @param <T> the generic for the type
      * @return
      */
     public <T> T getValue(final String section, final String key, final Class<T> type) {
@@ -157,7 +165,7 @@ public class IniParser {
 
     /**
      * get the keys from a particular section.
-     * @param section
+     * @param section the desired section
      * @return the keys for a section or an empty collection.
      */
     public Collection<String> getKeys(String section) {
@@ -166,7 +174,7 @@ public class IniParser {
 
     /**
      * return the section as a map.
-     * @param section
+     * @param section the desired section
      * @return null if not found
      */
     public Map<String, Object> getSection(final String section) {
