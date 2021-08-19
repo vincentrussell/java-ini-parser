@@ -1,5 +1,6 @@
 package com.github.vincentrussell.ini;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.mutable.MutableObject;
@@ -11,6 +12,7 @@ import java.text.ParseException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -189,5 +191,52 @@ public class Ini {
      */
     public void putValue(final String section, final String key, final Object value) {
         resultMap.computeIfAbsent(section, s -> new HashMap<>()).put(key, value);
+    }
+
+    /**
+     * store the ini to an outputstream
+     * @param outputStream the outputstream to write to
+     * @param comments the comments to put at the top of the file
+     * @throws IOException if there is an error writing to the outputstream
+     */
+    public void store(final OutputStream outputStream, final String comments) throws IOException {
+        store(new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)),
+                comments);
+    }
+
+    /**
+     * store the ini to a writer
+     * @param writer the write to use
+     * @param comments commments to put at the top of the file.
+     * @throws IOException if there is an error writing to the writer
+     */
+    public void store(final Writer writer, final String comments) throws IOException {
+        try (BufferedWriter bufferedWriter = (writer instanceof BufferedWriter)
+                ? (BufferedWriter) writer : new BufferedWriter(writer)) {
+            doStore(bufferedWriter, comments);
+        }
+    }
+
+    private void doStore(final BufferedWriter bufferedWriter, final String comments) throws IOException {
+        writeComments(bufferedWriter, comments);
+        for (Map.Entry<String, Map<String, Object>> section : resultMap.entrySet()) {
+            bufferedWriter.write("[" + section.getKey() + "]");
+            bufferedWriter.newLine();
+            for (Map.Entry<String, Object> sectionEntry : section.getValue().entrySet()) {
+                bufferedWriter.write(sectionEntry.getKey() + " = ");
+                bufferedWriter.write(sectionEntry.getValue().toString());
+                bufferedWriter.newLine();
+            }
+            bufferedWriter.newLine();
+        }
+    }
+
+    private static void writeComments(BufferedWriter bw, String comments)
+            throws IOException {
+        if (comments !=null ) {
+            bw.write("#");
+            IOUtils.write(comments, bw);
+            bw.newLine();
+        }
     }
 }

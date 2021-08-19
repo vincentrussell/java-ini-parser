@@ -74,6 +74,14 @@ Be careful!  Precision can be lost here.
  ini.putValue("section", "key", "value")
 ```
 
+### Write ini to file
+
+```
+ Ini ini = new Ini();
+ ini.putValue("section", "key", "value")
+ ini.store(new FileWriter("/tmp/file.ini"), "some comments at the top of the file");
+```
+
 # Change Log
 
 ## [1.0](https://github.com/vincentrussell/java-ini-parser/tree/java-ini-parser-1.0) (2021-08-17)

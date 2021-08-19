@@ -3,9 +3,8 @@ package com.github.vincentrussell.ini;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.util.Properties;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.*;
@@ -80,6 +79,24 @@ public class IniTest {
         ini.putValue("Numbers", "double2", Double.valueOf("3.1455"));
         assertEquals("Hello2", ini.getValue("String", "newString"));
         assertEquals(Double.valueOf("3.1455"), ini.getValue("Numbers", "double2"));
+    }
+
+    @Test
+    public void store() throws IOException {
+        Ini ini = new Ini();
+        ini.putValue("String", "string", "Hello1");
+        ini.putValue("Numbers", "double", Double.valueOf("3.1455"));
+        ini.putValue("String", "string2", "Hello2");
+        ini.putValue("Numbers", "double2", Double.valueOf("3.12315"));
+        StringWriter stringWriter = new StringWriter();
+        ini.store(stringWriter, "some comments at the top of the file");
+        Ini ini2 = new Ini();
+        ini2.load(stringWriter.toString());
+        assertEquals("Hello1", ini2.getValue("String", "string"));
+        assertEquals(Double.valueOf("3.1455"), ini2.getValue("Numbers", "double"));
+        assertEquals("Hello2", ini2.getValue("String", "string2"));
+        assertEquals(Double.valueOf("3.12315"), ini2.getValue("Numbers", "double2"));
+
     }
 
     @Test
