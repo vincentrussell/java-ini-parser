@@ -89,6 +89,7 @@ Be careful!  Precision can be lost here.
 **Enhancements:**
 
 - Created getSectionWithKeysWithPrefix and getSectionWithKeysWithRegex
+- Added the ability to remove sections and remove values from ini.
 
 ## [1.0](https://github.com/vincentrussell/java-ini-parser/tree/java-ini-parser-1.0) (2021-08-20)
 

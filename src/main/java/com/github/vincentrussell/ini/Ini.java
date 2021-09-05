@@ -12,8 +12,6 @@ import java.text.ParseException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
-import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -270,5 +268,27 @@ public class Ini {
             IOUtils.write(comments, bw);
             bw.newLine();
         }
+    }
+
+    /**
+     * Removes the specified section.
+     *
+     * The ini object will not contain a mapping for the specified section once the call returns.
+     * @param section the section to remove
+     * @return the previous value associated with key, or null if there was no mapping for key.
+     */
+    public Map<String, Object> removeSection(final String section) {
+        return resultMap.remove(section);
+    }
+
+    /**
+     * Removes the specified key in the specified section.
+     * The ini object will not contain a mapping for the specified section once the call returns.
+     * @param section the section to remove
+     * @param key the key in that section to remove
+     * @return the previous value associated with key, or null if there was no mapping for key.
+     */
+    public Object removeSectionKey(final String section, final String key) {
+        return resultMap.getOrDefault(section, new HashMap<>()).remove(key);
     }
 }

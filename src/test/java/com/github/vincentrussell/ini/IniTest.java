@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import java.io.*;
 import java.util.Map;
-import java.util.Properties;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.*;
@@ -165,5 +164,40 @@ public class IniTest {
     public void nullInputStream() throws IOException {
         Ini ini = new Ini();
         ini.load((InputStream) null);
+    }
+
+    @Test
+    public void removeSection() throws IOException {
+        Ini ini = new Ini();
+        ini.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/sample2.ini"));
+        Map<String, Object> result = ini.removeSection("FTP");
+        assertEquals(result, ImmutableMap.<String, Object>builder()
+                .put("FTPDir", "/opt/ecs/mvuser/MV_IPTel/data/FTPdata")
+                .put("SUUserName", "mvuser")
+                .put("SUPassword", "Avaya")
+                .put("RunFTP", 1L)
+                .put("EnableSU", 1L)
+                .put("FTPPort", 21L)
+                .put("FTPDataPort", 20L)
+                .put("FTP_TimeOut", 5L)
+                .build());
+        assertNull(ini.getSection("FTP"));
+    }
+
+    @Test
+    public void removeValue() throws IOException {
+        Ini ini = new Ini();
+        ini.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/sample2.ini"));
+        Object result = ini.removeSectionKey("FTP", "FTPDir");
+        assertEquals("/opt/ecs/mvuser/MV_IPTel/data/FTPdata", result);
+        assertEquals(ini.getSection("FTP"), ImmutableMap.<String, Object>builder()
+                .put("SUUserName", "mvuser")
+                .put("SUPassword", "Avaya")
+                .put("RunFTP", 1L)
+                .put("EnableSU", 1L)
+                .put("FTPPort", 21L)
+                .put("FTPDataPort", 20L)
+                .put("FTP_TimeOut", 5L)
+                .build());
     }
 }
