@@ -84,6 +84,12 @@ Be careful!  Precision can be lost here.
 
 # Change Log
 
+## [1.1](https://github.com/vincentrussell/java-ini-parser/tree/java-ini-parser-1.1) (2021-09-20)
+
+**Enhancements:**
+
+- Created getSectionWithKeysWithPrefix and getSectionWithKeysWithRegex
+
 ## [1.0](https://github.com/vincentrussell/java-ini-parser/tree/java-ini-parser-1.0) (2021-08-20)
 
 **Bugs:**

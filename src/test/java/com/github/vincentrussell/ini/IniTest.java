@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
 
 import java.io.*;
+import java.util.Map;
 import java.util.Properties;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -136,6 +137,28 @@ public class IniTest {
         ini.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/sample2.ini"));
         assertThat(ini.getKeys("FTPS"), containsInAnyOrder("RunFTPS", "FTPPort", "FTPDataPort"));
         assertTrue(ini.getKeys("notFound").isEmpty());
+    }
+
+    @Test
+    public void startsWith() throws IOException {
+        Ini ini = new Ini();
+        ini.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/startsWithExample.ini"));
+        assertTrue(ini.getSectionWithKeysWithPrefix("notFound", "notFound").isEmpty());
+        Map<String, Object> result = ini.getSectionWithKeysWithPrefix("Sample", "my.port.");
+        assertThat(result.keySet(), containsInAnyOrder("my.port.1", "my.port.2"));
+        assertEquals("127.0.0.1:80:8080/tcp", result.get("my.port.1"));
+        assertEquals("127.0.0.1:70:7070/tcp", result.get("my.port.2"));
+    }
+
+    @Test
+    public void matchesRegex() throws IOException {
+        Ini ini = new Ini();
+        ini.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/startsWithExample.ini"));
+        assertTrue(ini.getSectionWithKeysWithRegex("notFound", "notFound").isEmpty());
+        Map<String, Object> result = ini.getSectionWithKeysWithRegex("Sample", "^my\\.port\\.[\\d]{1}");
+        assertThat(result.keySet(), containsInAnyOrder("my.port.1", "my.port.2"));
+        assertEquals("127.0.0.1:80:8080/tcp", result.get("my.port.1"));
+        assertEquals("127.0.0.1:70:7070/tcp", result.get("my.port.2"));
     }
 
     @Test(expected = FileNotFoundException.class)

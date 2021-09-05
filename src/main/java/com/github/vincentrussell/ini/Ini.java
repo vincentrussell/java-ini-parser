@@ -13,8 +13,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import static org.apache.commons.lang3.ObjectUtils.firstNonNull;
 
 /**
  * This class is responsible for converting input streams into maps of maps that represent ini files.
@@ -181,6 +185,34 @@ public class Ini {
      */
     public Map<String, Object> getSection(final String section) {
         return resultMap.get(section);
+    }
+
+
+    /**
+     * get a subset of a section where all the keys match the provided prefix
+     * @param section the desired section
+     * @param prefix that the key starts with
+     * @return a subset of a section where all the keys match the provided prefix
+     */
+    public Map<String, Object> getSectionWithKeysWithPrefix(final String section, final String prefix) {
+        final Map<String, Object> stringObjectMap = firstNonNull(resultMap.get(section), new HashMap<>());
+        return stringObjectMap.entrySet().stream()
+                .filter(map -> map.getKey().startsWith(prefix))
+                .collect(Collectors.toMap(map -> map.getKey(), map -> map.getValue()));
+    }
+
+    /**
+     * get a subset of a section where all the keys match the provided prefix
+     * @param section the desired section
+     * @param regex that matches the key
+     * @return a subset of a section where all the keys match the provided prefix
+     */
+    public Map<String, Object> getSectionWithKeysWithRegex(final String section, final String regex) {
+        final Pattern pattern = Pattern.compile(regex);
+        final Map<String, Object> stringObjectMap = firstNonNull(resultMap.get(section), new HashMap<>());
+        return stringObjectMap.entrySet().stream()
+                .filter(map -> pattern.matcher(map.getKey()).matches())
+                .collect(Collectors.toMap(map -> map.getKey(), map -> map.getValue()));
     }
 
     /**
