@@ -82,6 +82,37 @@ Be careful!  Precision can be lost here.
  ini.store(new FileWriter("/tmp/file.ini"), "some comments at the top of the file");
 ```
 
+### remove key from a section
+
+```
+ Ini ini = new Ini();
+ ini.load(new FileInputStream("samples/sample2.ini"));
+ Object value = ini.removeSectionKey("String", "string")
+```
+### remove a section
+
+```
+ Ini ini = new Ini();
+ ini.load(new FileInputStream("samples/sample2.ini"));
+ Object value = ini.removeSection("String")
+```
+
+### get section entries that have keys that start with prefix
+
+```
+ Ini ini = new Ini();
+ ini.load(new FileInputStream("samples/sample2.ini"));
+ Map<String, Object> result = ini.getSectionWithKeysWithPrefix("Sample", "my.port.");
+```
+### get section entries that have keys that match a regex
+
+```
+ Ini ini = new Ini();
+ ini.load(new FileInputStream("samples/sample2.ini"));
+ Map<String, Object> result = ini.getSectionWithKeysWithRegex("Sample", "^my\\.port\\.[\\d]{1}");
+```
+
+
 # Change Log
 
 ## [1.1](https://github.com/vincentrussell/java-ini-parser/tree/java-ini-parser-1.1) (2021-09-20)
