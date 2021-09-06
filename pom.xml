@@ -6,7 +6,7 @@
 
   <groupId>com.github.vincentrussell</groupId>
   <artifactId>java-ini-parser</artifactId>
-  <version>1.1</version>
+  <version>1.2-SNAPSHOT</version>
   <build>
     <plugins>
       <plugin>
