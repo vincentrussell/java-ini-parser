@@ -10,7 +10,7 @@ Add a dependency to `com.github.vincentrussell:java-ini-parser`.
 <dependency>
    <groupId>com.github.vincentrussell</groupId>
    <artifactId>java-ini-parser</artifactId>
-   <version>1.0</version>
+   <version>1.1</version>
 </dependency>
 ```
 
@@ -115,7 +115,7 @@ Be careful!  Precision can be lost here.
 
 # Change Log
 
-## [1.1](https://github.com/vincentrussell/java-ini-parser/tree/java-ini-parser-1.1) (2021-09-20)
+## [1.1](https://github.com/vincentrussell/java-ini-parser/tree/java-ini-parser-1.1) (2021-09-06)
 
 **Enhancements:**
 
