@@ -25,6 +25,15 @@ public class IniTest {
     }
 
     @Test
+    public void testInlineCommentWithString() throws IOException {
+        Ini ini = new Ini();
+        ini.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/sample.ini"));
+        assertEquals("Henry", ini.getValue("String", "userWithComment2"));
+        assertEquals("Henry", ini.getValue("String", "userWithComment"));
+
+    }
+
+    @Test
     public void getAndSpecifyType() throws IOException {
         Ini ini = new Ini();
         ini.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/sample.ini"));
@@ -200,4 +209,29 @@ public class IniTest {
                 .put("FTP_TimeOut", 5L)
                 .build());
     }
+    @Test
+    public void handleEscapedCharacters() throws IOException {
+        Ini ini = new Ini();
+        ini.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/sampleWithQuotes.ini"));
+        assertEquals("Hello", ini.getValue("String", "string"));
+        assertEquals("Henry", ini.getValue("String", "user"));
+        assertEquals("'Henry'", ini.getValue("String", "escapedSingle"));
+        assertEquals("\"Henry\"", ini.getValue("String", "escapedDouble"));
+        assertEquals("Henry\"s hello", ini.getValue("String", "doubleQuoteInTheMiddle"));
+        assertEquals("Henry\'s hello", ini.getValue("String", "singleQuoteInTheMiddle"));
+        assertEquals("Henry\\s hello", ini.getValue("String", "backslash"));
+        assertEquals("Henry\thello", ini.getValue("String", "tab"));
+        assertEquals("Henry\rhello", ini.getValue("String", "carriagereturn"));
+        assertEquals("Henry\nhello", ini.getValue("String", "linefeed"));
+        assertEquals("Henry\0hello", ini.getValue("String", "nullcharacter"));
+        assertEquals("Henry\bhello", ini.getValue("String", "backspace"));
+        assertEquals("Henry\\;hello", ini.getValue("String", "semicolon"));
+        assertEquals("Henry#hello", ini.getValue("String", "numbersign"));
+        assertEquals("Henry=hello", ini.getValue("String", "equalsign"));
+        assertEquals("Henry:hello", ini.getValue("String", "colon"));
+        assertEquals("Henry\fhello", ini.getValue("String", "formfeed"));
+        assertEquals("Henry\"", ini.getValue("String", "quoteOnRight"));
+        assertEquals("\"Henry", ini.getValue("String", "quoteOnLeft"));
+    }
+
 }

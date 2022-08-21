@@ -115,6 +115,13 @@ Be careful!  Precision can be lost here.
 
 # Change Log
 
+## [1.3](https://github.com/vincentrussell/java-ini-parser/tree/java-ini-parser-1.3) (2022-08-21)
+
+**Enhancements:**
+
+- Support for inline comments with ; and #
+- Support for special characters that can be found in ini files like \b,\f,\r\t,etc
+
 ## [1.2](https://github.com/vincentrussell/java-ini-parser/tree/java-ini-parser-1.2) (2022-07-20)
 
 **Enhancements:**

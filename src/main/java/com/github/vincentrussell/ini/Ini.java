@@ -27,7 +27,6 @@ public class Ini {
     private static Pattern SECTION_PATTERN  = Pattern.compile( "\\s*\\[([^]]*)\\]\\s*" );
     private static Pattern  KEY_VALUE_PATTER = Pattern.compile( "\\s*([^=]*)=(.*)" );
     private static Pattern COMMENT_LINE = Pattern.compile("^[;|#].*");
-
     private Map<String, Map<String, Object>> resultMap = new HashMap<>();
 
 
@@ -88,15 +87,36 @@ public class Ini {
                 continue;
             }
 
+            if (line != null) {
+                line = line.replaceAll("[^\\\\]{1}#.+", "")
+                        .replaceAll("[^\\\\]{1};.+", "");
+            }
+
             final Matcher keyValueMatcher = KEY_VALUE_PATTER.matcher(line);
             if (keyValueMatcher.matches()) {
                 final String key = keyValueMatcher.group(1).trim();
-                final String value = keyValueMatcher.group(2).trim();
+                final String value = handleEscapedAndSpecialCharacters(keyValueMatcher.group(2).trim());
 
                 resultMap.computeIfAbsent(section.getValue(), s -> new HashMap<>()).put(key, normalizeValue(value));
-                continue;
             }
         }
+    }
+
+    private String handleEscapedAndSpecialCharacters(String string) {
+        return string.replaceAll("^\"(.*)\"$", "$1")
+                .replaceAll("^'(.*)'$", "$1")
+                .replaceAll("\\\\\"", "\"")
+                .replaceAll("\\\\\'", "\'")
+                .replaceAll("\\\\\\\\", "\\\\")
+                .replaceAll("\\\\t", "\t")
+                .replaceAll("\\\\r", "\r")
+                .replaceAll("\\\\n", "\n")
+                .replaceAll("\\\\0", "\0")
+                .replaceAll("\\\\b", "\b")
+                .replaceAll("\\\\f", "\f")
+                .replaceAll("\\\\#", "#")
+                .replaceAll("\\\\=", "=")
+                .replaceAll("\\\\:", ":");
     }
 
     private Object normalizeValue(final String value) {
