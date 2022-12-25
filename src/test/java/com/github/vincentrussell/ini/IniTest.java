@@ -3,11 +3,17 @@ package com.github.vincentrussell.ini;
 import com.google.common.collect.ImmutableMap;
 import org.junit.Test;
 
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class IniTest {
 
@@ -234,4 +240,55 @@ public class IniTest {
         assertEquals("\"Henry", ini.getValue("String", "quoteOnLeft"));
     }
 
+
+    @Test
+    public void orderIsMaintained() throws IOException {
+        Ini ini = new Ini();
+        ini.putValue("z", "z", 1);
+        ini.putValue("z", "y", 1);
+        ini.putValue("z", "x", 1);
+
+        ini.putValue("c", "z", 1);
+        ini.putValue("c", "y", 1);
+        ini.putValue("c", "x", 1);
+
+
+        ini.putValue("g", "z", 1);
+        ini.putValue("g", "y", 1);
+        ini.putValue("g", "x", 1);
+
+        StringWriter writer = new StringWriter();
+        ini.store(writer , "");
+        assertEquals("#\n" +
+                "[z]\n" +
+                "z = 1\n" +
+                "y = 1\n" +
+                "x = 1\n" +
+                "\n" +
+                "[c]\n" +
+                "z = 1\n" +
+                "y = 1\n" +
+                "x = 1\n" +
+                "\n" +
+                "[g]\n" +
+                "z = 1\n" +
+                "y = 1\n" +
+                "x = 1\n" +
+                "\n", writer.toString());
+    }
+
+
+    @Test
+    public void sectionMatchesFunction() throws IOException {
+        Ini ini = new Ini();
+        ini.putValue("z", "z", 4.4);
+        ini.putValue("z", "y", 7);
+        ini.putValue("z", "x", 8);
+        ini.putValue("z", "a", "string");
+
+          assertEquals(new ImmutableMap.Builder<String, Double>()
+                  .put("z", 4.4).build(), ini.getSectionWithKeysThatMatchFunction(
+                          "z", entry -> Double.class.isInstance(entry.getValue())));
+
+    }
 }

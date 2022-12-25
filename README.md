@@ -115,6 +115,14 @@ Be careful!  Precision can be lost here.
 
 # Change Log
 
+## [1.4](https://github.com/vincentrussell/java-ini-parser/tree/java-ini-parser-1.4) (2022-12-25)
+
+**Enhancements:**
+
+- Internal ini structure is now backed by LinkedHashMap instead of Hashmap to maintain insert order
+- created Map<String, Object> getSectionWithKeysThatMatchFunction(String section, Predicate<Map.Entry<String, Object>> filter) method 
+
+
 ## [1.3](https://github.com/vincentrussell/java-ini-parser/tree/java-ini-parser-1.3) (2022-08-21)
 
 **Enhancements:**

@@ -11,7 +11,9 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -27,7 +29,7 @@ public class Ini {
     private static Pattern SECTION_PATTERN  = Pattern.compile( "\\s*\\[([^]]*)\\]\\s*" );
     private static Pattern  KEY_VALUE_PATTER = Pattern.compile( "\\s*([^=]*)=(.*)" );
     private static Pattern COMMENT_LINE = Pattern.compile("^[;|#].*");
-    private Map<String, Map<String, Object>> resultMap = new HashMap<>();
+    private Map<String, Map<String, Object>> resultMap = new LinkedHashMap<>();
 
 
     /**
@@ -97,7 +99,7 @@ public class Ini {
                 final String key = keyValueMatcher.group(1).trim();
                 final String value = handleEscapedAndSpecialCharacters(keyValueMatcher.group(2).trim());
 
-                resultMap.computeIfAbsent(section.getValue(), s -> new HashMap<>()).put(key, normalizeValue(value));
+                resultMap.computeIfAbsent(section.getValue(), s -> new LinkedHashMap<>()).put(key, normalizeValue(value));
             }
         }
     }
@@ -149,7 +151,7 @@ public class Ini {
      * @return the value from the nested structure and cast it to the specified type.
      */
     public <T> T getValue(final String section, final String key, final Class<T> type) {
-        return cast(resultMap.getOrDefault(section, new HashMap<>()).get(key), type);
+        return cast(resultMap.getOrDefault(section, new LinkedHashMap<>()).get(key), type);
     }
 
     @SuppressWarnings("unchecked")
@@ -193,7 +195,7 @@ public class Ini {
      * @return the keys for a section or an empty collection.
      */
     public Collection<String> getKeys(String section) {
-        return resultMap.getOrDefault(section, new HashMap<>()).keySet();
+        return resultMap.getOrDefault(section, new LinkedHashMap<>()).keySet();
     }
 
     /**
@@ -213,11 +215,24 @@ public class Ini {
      * @return a subset of a section where all the keys match the provided prefix
      */
     public Map<String, Object> getSectionWithKeysWithPrefix(final String section, final String prefix) {
-        final Map<String, Object> stringObjectMap = firstNonNull(resultMap.get(section), new HashMap<>());
+        return getSectionWithKeysThatMatchFunction(section, entry -> entry.getKey().startsWith(prefix));
+    }
+
+
+    /**
+     * get a subset of a section where all the keys match the provided filter
+     * @param section
+     * @param filter the filter that the Map.Entry in she specified section must match
+     * @return
+     */
+    public Map<String, Object> getSectionWithKeysThatMatchFunction(final String section,
+                                                       final Predicate<Map.Entry<String, Object>> filter) {
+        final Map<String, Object> stringObjectMap = firstNonNull(resultMap.get(section), new LinkedHashMap<>());
         return stringObjectMap.entrySet().stream()
-                .filter(map -> map.getKey().startsWith(prefix))
+                .filter(map -> filter.test(map))
                 .collect(Collectors.toMap(map -> map.getKey(), map -> map.getValue()));
     }
+
 
     /**
      * get a subset of a section where all the keys match the provided prefix
@@ -227,10 +242,7 @@ public class Ini {
      */
     public Map<String, Object> getSectionWithKeysWithRegex(final String section, final String regex) {
         final Pattern pattern = Pattern.compile(regex);
-        final Map<String, Object> stringObjectMap = firstNonNull(resultMap.get(section), new HashMap<>());
-        return stringObjectMap.entrySet().stream()
-                .filter(map -> pattern.matcher(map.getKey()).matches())
-                .collect(Collectors.toMap(map -> map.getKey(), map -> map.getValue()));
+        return getSectionWithKeysThatMatchFunction(section, entry -> pattern.matcher(entry.getKey()).matches());
     }
 
     /**
@@ -240,7 +252,7 @@ public class Ini {
      * @param value the value to store for that key
      */
     public void putValue(final String section, final String key, final Object value) {
-        resultMap.computeIfAbsent(section, s -> new HashMap<>()).put(key, value);
+        resultMap.computeIfAbsent(section, s -> new LinkedHashMap<>()).put(key, value);
     }
 
     /**
@@ -256,7 +268,7 @@ public class Ini {
 
     /**
      * store the ini to a writer
-     * @param writer the write to use
+     * @param writer the writer to use
      * @param comments commments to put at the top of the file.
      * @throws IOException if there is an error writing to the writer
      */
@@ -309,6 +321,6 @@ public class Ini {
      * @return the previous value associated with key, or null if there was no mapping for key.
      */
     public Object removeSectionKey(final String section, final String key) {
-        return resultMap.getOrDefault(section, new HashMap<>()).remove(key);
+        return resultMap.getOrDefault(section, new LinkedHashMap<>()).remove(key);
     }
 }
