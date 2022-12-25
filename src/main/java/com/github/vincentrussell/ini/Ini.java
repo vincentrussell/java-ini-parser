@@ -104,7 +104,7 @@ public class Ini {
         }
     }
 
-    private String handleEscapedAndSpecialCharacters(String string) {
+    private String handleEscapedAndSpecialCharacters(final String string) {
         return string.replaceAll("^\"(.*)\"$", "$1")
                 .replaceAll("^'(.*)'$", "$1")
                 .replaceAll("\\\\\"", "\"")
@@ -155,7 +155,7 @@ public class Ini {
     }
 
     @SuppressWarnings("unchecked")
-    private <T> T cast(Object o, Class<T> type) {
+    private <T> T cast(final Object o, final Class<T> type) {
         if (type.isInstance(o)) {
             return (T) o;
         } else if (String.class.equals(type)) {
@@ -194,7 +194,7 @@ public class Ini {
      * @param section the desired section
      * @return the keys for a section or an empty collection.
      */
-    public Collection<String> getKeys(String section) {
+    public Collection<String> getKeys(final String section) {
         return resultMap.getOrDefault(section, new LinkedHashMap<>()).keySet();
     }
 
@@ -293,7 +293,7 @@ public class Ini {
         }
     }
 
-    private static void writeComments(BufferedWriter bw, String comments)
+    private static void writeComments(final BufferedWriter bw, final String comments)
             throws IOException {
         if (comments !=null ) {
             bw.write("#");
