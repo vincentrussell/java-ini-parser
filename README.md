@@ -112,6 +112,14 @@ Be careful!  Precision can be lost here.
  Map<String, Object> result = ini.getSectionWithKeysWithRegex("Sample", "^my\\.port\\.[\\d]{1}");
 ```
 
+### get section entries that have keys that matches a filter
+
+```
+ Ini ini = new Ini();
+ ini.load(new FileInputStream("samples/sample2.ini"));
+ Map<String, Object> result = ini.getSectionWithKeysThatMatchFunction("Sample", entry -> Double.class.isInstance(entry.getValue()));
+```
+
 
 # Change Log
 
