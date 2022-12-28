@@ -286,9 +286,29 @@ public class IniTest {
         ini.putValue("z", "x", 8);
         ini.putValue("z", "a", "string");
 
-          assertEquals(new ImmutableMap.Builder<String, Double>()
+        assertEquals(new ImmutableMap.Builder<String, Double>()
                   .put("z", 4.4).build(), ini.getSectionWithKeysThatMatchFunction(
                           "z", entry -> Double.class.isInstance(entry.getValue())));
 
+    }
+
+    @Test
+    public void multilineSupport() throws IOException {
+        Ini ini = new Ini();
+        ini.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/multiline.ini"));
+
+        assertEquals("\n" +
+                "    this \n" +
+                "    is \n" +
+                "    a \n" +
+                "    multi-line \n" +
+                "    value", ini.getValue("String", "multilineKey"));
+        assertEquals("Henry", ini.getValue("String", "userWithComment2"));
+        assertEquals("\n" +
+                "this \n" +
+                "is \n" +
+                "a \n" +
+                "multi-line \n" +
+                "value", ini.getValue("String", "multilineKey2"));
     }
 }

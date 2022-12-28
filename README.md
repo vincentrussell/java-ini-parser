@@ -120,6 +120,19 @@ Be careful!  Precision can be lost here.
  Map<String, Object> result = ini.getSectionWithKeysThatMatchFunction("Sample", entry -> Double.class.isInstance(entry.getValue()));
 ```
 
+### multiline support
+
+```
+[group]
+key=value
+multilineKey = \
+    this \
+    is \
+    a \
+    multi-line \
+    value
+anotherKey = value
+```
 
 # Change Log
 
@@ -128,7 +141,8 @@ Be careful!  Precision can be lost here.
 **Enhancements:**
 
 - Internal ini structure is now backed by LinkedHashMap instead of Hashmap to maintain insert order
-- created Map<String, Object> getSectionWithKeysThatMatchFunction(String section, Predicate<Map.Entry<String, Object>> filter) method 
+- created Map<String, Object> getSectionWithKeysThatMatchFunction(String section, Predicate<Map.Entry<String, Object>> filter) method
+- multiline support with ending lines with '\'
 
 
 ## [1.3](https://github.com/vincentrussell/java-ini-parser/tree/java-ini-parser-1.3) (2022-08-21)

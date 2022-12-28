@@ -2,6 +2,7 @@ package com.github.vincentrussell.ini;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.mutable.MutableObject;
 
@@ -75,7 +76,9 @@ public class Ini {
 
     private void parseIniFile(final MutableObject<String> section,
                               final BufferedReader bufferedReader) throws IOException {
-        String line;
+        String line = null;
+        String multilineValue = null;
+        String key = null;
         while ((line = bufferedReader.readLine()) != null ) {
 
             final Matcher commentMatcher = COMMENT_LINE.matcher(line);
@@ -94,13 +97,32 @@ public class Ini {
                         .replaceAll("[^\\\\]{1};.+", "");
             }
 
+            if (StringUtils.isEmpty(line)) {
+                continue;
+            }
+
             final Matcher keyValueMatcher = KEY_VALUE_PATTER.matcher(line);
             if (keyValueMatcher.matches()) {
-                final String key = keyValueMatcher.group(1).trim();
-                final String value = handleEscapedAndSpecialCharacters(keyValueMatcher.group(2).trim());
-
-                resultMap.computeIfAbsent(section.getValue(), s -> new LinkedHashMap<>()).put(key, normalizeValue(value));
+                key = keyValueMatcher.group(1).trim();
+                String value = handleEscapedAndSpecialCharacters(keyValueMatcher.group(2).trim()).replaceAll("\\\\$", "\n");
+                multilineValue = value;
+                if (line.endsWith("\\")) {
+                    continue;
+                }
+            } else if (line.endsWith("\\")) {
+                multilineValue+= line.replaceAll("\\\\$", "\n");
+                continue;
+            } else if (multilineValue != null){
+                multilineValue+= line.replaceAll("\\\\$", "\n");
             }
+
+
+            if (StringUtils.isNotEmpty(key)) {
+                resultMap.computeIfAbsent(section.getValue(),
+                        s -> new LinkedHashMap<>()).put(key, normalizeValue(multilineValue));
+            }
+            key = null;
+            multilineValue = null;
         }
     }
 
