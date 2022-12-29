@@ -94,7 +94,8 @@ public class Ini {
 
             if (line != null) {
                 line = line.replaceAll("[^\\\\]{1}#.+", "")
-                        .replaceAll("[^\\\\]{1};.+", "");
+                        .replaceAll("[^\\\\]{1};.+", "")
+                        .replaceAll("\\\\([;#]{1})", "$1");
             }
 
             if (StringUtils.isEmpty(line)) {

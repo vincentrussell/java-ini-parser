@@ -231,13 +231,14 @@ public class IniTest {
         assertEquals("Henry\nhello", ini.getValue("String", "linefeed"));
         assertEquals("Henry\0hello", ini.getValue("String", "nullcharacter"));
         assertEquals("Henry\bhello", ini.getValue("String", "backspace"));
-        assertEquals("Henry\\;hello", ini.getValue("String", "semicolon"));
+        assertEquals("Henry;hello", ini.getValue("String", "semicolon"));
         assertEquals("Henry#hello", ini.getValue("String", "numbersign"));
         assertEquals("Henry=hello", ini.getValue("String", "equalsign"));
         assertEquals("Henry:hello", ini.getValue("String", "colon"));
         assertEquals("Henry\fhello", ini.getValue("String", "formfeed"));
         assertEquals("Henry\"", ini.getValue("String", "quoteOnRight"));
         assertEquals("\"Henry", ini.getValue("String", "quoteOnLeft"));
+        assertEquals("string1;string2;string3", ini.getValue("String", "multipleSemiColons"));
     }
 
 

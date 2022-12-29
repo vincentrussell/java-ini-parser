@@ -144,6 +144,9 @@ anotherKey = value
 - created Map<String, Object> getSectionWithKeysThatMatchFunction(String section, Predicate<Map.Entry<String, Object>> filter) method
 - multiline support with ending lines with '\'
 
+**Bugs:**
+
+- Escaped semicolons and pound signs not working properly
 
 ## [1.3](https://github.com/vincentrussell/java-ini-parser/tree/java-ini-parser-1.3) (2022-08-21)
 
