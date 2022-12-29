@@ -151,7 +151,7 @@ public class Ini {
         }
     }
 
-    private Map<String, Object> getMapForSection(MutableObject<String> section) {
+    private Map<String, Object> getMapForSection(final MutableObject<String> section) {
         return resultMap.computeIfAbsent(
                 section.getValue(), s1 -> new LinkedHashMap<>());
     }

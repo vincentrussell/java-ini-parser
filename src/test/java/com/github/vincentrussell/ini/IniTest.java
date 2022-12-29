@@ -22,15 +22,11 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class IniTest {
-
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @Rule
-    public final EnvironmentVariables environmentVariables
-            = new EnvironmentVariables();
-
-
+    public final EnvironmentVariables environmentVariables = new EnvironmentVariables();
 
     @Test
     public void testNumbers() throws IOException {
