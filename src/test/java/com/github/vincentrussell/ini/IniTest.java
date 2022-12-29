@@ -1,8 +1,13 @@
 package com.github.vincentrussell.ini;
 
 import com.google.common.collect.ImmutableMap;
+import org.apache.commons.io.FileUtils;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.contrib.java.lang.system.EnvironmentVariables;
+import org.junit.rules.TemporaryFolder;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,6 +21,15 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 public class IniTest {
+
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
+
+    @Rule
+    public final EnvironmentVariables environmentVariables
+            = new EnvironmentVariables();
+
+
 
     @Test
     public void testNumbers() throws IOException {
@@ -181,6 +195,15 @@ public class IniTest {
         ini.load((InputStream) null);
     }
 
+
+    @Test(expected = FileNotFoundException.class)
+    public void nonExistingFile() throws IOException {
+        File file = temporaryFolder.newFile();
+        FileUtils.deleteQuietly(file);
+        Ini ini = new Ini();
+        ini.load(file);
+    }
+
     @Test
     public void removeSection() throws IOException {
         Ini ini = new Ini();
@@ -311,5 +334,20 @@ public class IniTest {
                 "a \n" +
                 "multi-line \n" +
                 "value", ini.getValue("String", "multilineKey2"));
+    }
+
+    @Test
+    public void variableInterpolationInIniFile() throws IOException {
+        Ini ini = new Ini();
+        try {
+            environmentVariables.set("ENV_VAR1", "this is an environment variable");
+            System.setProperty("some.sys.property", "this value is the best");
+            ini.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/interpolation.ini"));
+            assertEquals("value is some value", ini.getValue("section", "varKey"));
+            assertEquals("wouldn't you like to know that this value is the best", ini.getValue("section", "sysProperty"));
+            assertEquals("value is this is an environment variable", ini.getValue("section", "envVarKey"));
+        } finally {
+            System.getProperties().remove("some.sys.property");
+        }
     }
 }

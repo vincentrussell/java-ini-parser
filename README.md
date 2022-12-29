@@ -134,6 +134,16 @@ multilineKey = \
 anotherKey = value
 ```
 
+### string interpolation support from variables defined in ini section, system properties or environment variables
+
+```
+[section]
+variable=some value
+sysProperty=wouldn't you like to know that ${some.sys.property}
+varKey=value is ${variable}
+envVarKey=value is ${ENV_VAR1}
+```
+
 # Change Log
 
 ## [1.4](https://github.com/vincentrussell/java-ini-parser/tree/java-ini-parser-1.4) (2022-12-25)
@@ -143,6 +153,7 @@ anotherKey = value
 - Internal ini structure is now backed by LinkedHashMap instead of Hashmap to maintain insert order
 - created Map<String, Object> getSectionWithKeysThatMatchFunction(String section, Predicate<Map.Entry<String, Object>> filter) method
 - multiline support with ending lines with '\'
+- string interpolation support
 
 **Bugs:**
 

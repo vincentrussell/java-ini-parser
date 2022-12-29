@@ -5,6 +5,8 @@ import org.apache.commons.lang3.ClassUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.mutable.MutableObject;
+import org.apache.commons.text.StringSubstitutor;
+import org.apache.commons.text.TextStringBuilder;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -14,6 +16,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -76,9 +79,15 @@ public class Ini {
 
     private void parseIniFile(final MutableObject<String> section,
                               final BufferedReader bufferedReader) throws IOException {
+
+        final Map<String, Object> variables = new HashMap<>();
+        variables.putAll(System.getenv());
+        variables.putAll(new HashMap<String, Object>((Map) System.getProperties()));
+
         String line = null;
         String multilineValue = null;
         String key = null;
+        Map<String, StringSubstitutor> stringStringSubstitutorPerSection = new HashMap<>();
         while ((line = bufferedReader.readLine()) != null ) {
 
             final Matcher commentMatcher = COMMENT_LINE.matcher(line);
@@ -119,12 +128,30 @@ public class Ini {
 
 
             if (StringUtils.isNotEmpty(key)) {
-                resultMap.computeIfAbsent(section.getValue(),
-                        s -> new LinkedHashMap<>()).put(key, normalizeValue(multilineValue));
+                Object normalizedValue = normalizeValue(multilineValue);
+
+                if (String.class.isInstance(normalizedValue) && line.contains("${")) {
+                    StringSubstitutor substitutor = stringStringSubstitutorPerSection.computeIfAbsent(
+                            section.getValue(), s -> {
+                                StringSubstitutor stringSubstitutor = new StringSubstitutor(
+                                        new DelegateMapWrapper(variables, getMapForSection(section)));
+                                stringSubstitutor.setEnableSubstitutionInVariables(true);
+                                return stringSubstitutor;
+                            });
+
+                    normalizedValue = substitutor.replace(normalizedValue.toString());
+                }
+
+                getMapForSection(section).put(key, normalizedValue);
             }
             key = null;
             multilineValue = null;
         }
+    }
+
+    private Map<String, Object> getMapForSection(MutableObject<String> section) {
+        return resultMap.computeIfAbsent(
+                section.getValue(), s1 -> new LinkedHashMap<>());
     }
 
     private String handleEscapedAndSpecialCharacters(final String string) {
