@@ -13,9 +13,11 @@ import java.nio.charset.StandardCharsets;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
@@ -254,7 +256,23 @@ public class Ini {
      * @return null if not found
      */
     public Map<String, Object> getSection(final String section) {
-        return resultMap.get(section);
+        Map<String, Object> map = resultMap.get(section);
+        if (map == null) {
+            return null;
+        }
+        return Collections.unmodifiableMap(map);
+    }
+    /**
+     * return the section as a map; sorted by key
+     * @param section the desired section
+     * @return null if not found
+     */
+    public Map<String, Object> getSectionSortedByKey(final String section) {
+        Map<String, Object> map = resultMap.get(section);
+        if (map == null) {
+            return null;
+        }
+        return Collections.unmodifiableMap(new TreeMap<>(map));
     }
 
 

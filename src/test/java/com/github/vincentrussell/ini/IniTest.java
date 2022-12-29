@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.Map;
+import java.util.TreeMap;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertEquals;
@@ -157,6 +158,22 @@ public class IniTest {
                 .put("FTPDataPort", 20L)
                 .put("FTP_TimeOut", 5L)
                 .build());
+    }
+
+    @Test
+    public void getSectionAsMapSorted() throws IOException {
+        Ini ini = new Ini();
+        ini.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/sample2.ini"));
+        assertEquals(ini.getSectionSortedByKey("FTP"), new TreeMap<>(ImmutableMap.<String, Object>builder()
+                .put("FTPDir", "/opt/ecs/mvuser/MV_IPTel/data/FTPdata")
+                .put("SUUserName", "mvuser")
+                .put("SUPassword", "Avaya")
+                .put("RunFTP", 1L)
+                .put("EnableSU", 1L)
+                .put("FTPPort", 21L)
+                .put("FTPDataPort", 20L)
+                .put("FTP_TimeOut", 5L)
+                .build()));
     }
 
     @Test
