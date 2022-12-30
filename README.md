@@ -146,7 +146,7 @@ envVarKey=value is ${ENV_VAR1}
 
 # Change Log
 
-## [1.4](https://github.com/vincentrussell/java-ini-parser/tree/java-ini-parser-1.4) (2022-12-25)
+## [1.4](https://github.com/vincentrussell/java-ini-parser/tree/java-ini-parser-1.4) (2022-12-29)
 
 **Enhancements:**
 
