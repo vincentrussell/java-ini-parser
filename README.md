@@ -152,7 +152,7 @@ envVarKey=value is ${ENV_VAR1}
 
 - Internal ini structure is now backed by LinkedHashMap instead of Hashmap to maintain insert order
 - created Map<String, Object> getSectionWithKeysThatMatchFunction(String section, Predicate<Map.Entry<String, Object>> filter) method
-- multiline support with ending lines with '\'
+- multiline support with ending lines with '\\'
 - string interpolation support
 
 **Bugs:**
