@@ -146,6 +146,17 @@ envVarKey=value is ${ENV_VAR1}
 
 # Change Log
 
+## [1.5](https://github.com/vincentrussell/java-ini-parser/tree/java-ini-parser-1.5) (TBD)
+
+**Enhancements:**
+
+- N/A
+
+**Bugs:**
+
+- Booleans not handled properly when calling ini.getValue("Boolean", "key", Boolean.class)
+- Characters not handled properly when calling ini.getValue("Char", "charKey", char.class)
+
 ## [1.4](https://github.com/vincentrussell/java-ini-parser/tree/java-ini-parser-1.4) (2022-12-29)
 
 **Enhancements:**

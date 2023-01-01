@@ -229,6 +229,12 @@ public class Ini {
             } else if (Byte.class.isAssignableFrom(type) || byte.class.isAssignableFrom(type)) {
                 return (T) (Byte) ((Number) o).byteValue();
             }
+        } else if (o != null && (Boolean.class.isAssignableFrom(type) || boolean.class.isAssignableFrom(type))) {
+            return (T) Boolean.valueOf(o.toString());
+        } else if (o != null && Character.class.isAssignableFrom(type)) {
+            return (T) Character.valueOf(o.toString().charAt(0));
+        } else if (o != null && char.class.isAssignableFrom(type)) {
+            return (T) Character.valueOf(o.toString().charAt(0));
         }
         return (T) o;
     }

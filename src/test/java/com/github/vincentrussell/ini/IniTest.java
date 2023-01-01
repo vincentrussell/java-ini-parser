@@ -17,6 +17,7 @@ import java.util.TreeMap;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -65,6 +66,22 @@ public class IniTest {
         assertEquals(Integer.valueOf(-32768), ini.getValue("Numbers", "short", int.class));
         assertEquals(Double.valueOf(-32768), ini.getValue("Numbers", "short", double.class));
         assertEquals(Float.valueOf(-32768), ini.getValue("Numbers", "short", float.class));
+    }
+
+    @Test
+    public void getAndSpecifyTypeConvertBoolean() throws IOException {
+        Ini ini = new Ini();
+        ini.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/sample.ini"));
+        assertTrue(ini.getValue("Boolean", "trueKey", boolean.class));
+        assertFalse(ini.getValue("Boolean", "falseKey", Boolean.class));
+    }
+
+    @Test
+    public void getAndSpecifyTypeConvertChar() throws IOException {
+        Ini ini = new Ini();
+        ini.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/sample.ini"));
+        assertEquals('a', (char)ini.getValue("Char", "charKey", char.class));
+        assertEquals('b', (char)ini.getValue("Char", "characterKey", Character.class));
     }
 
     @Test
