@@ -184,6 +184,16 @@ public class Ini {
         return value;
     }
 
+     /**
+     * return true if the section and section key exists, false otherwise
+     * @param section the desired section
+     * @param key the key in the section
+     * @return true if the section and section key exists, false otherwise
+     */
+    public boolean has(final String section, final String key) {
+        return (resultMap.containsKey(section) && resultMap.get(section).containsKey(key));
+    }
+    
     /**
      * return a value from the nested structure as an object
      * @param section the desired section
