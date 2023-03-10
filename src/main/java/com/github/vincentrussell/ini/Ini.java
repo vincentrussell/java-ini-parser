@@ -6,7 +6,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.mutable.MutableObject;
 import org.apache.commons.text.StringSubstitutor;
-import org.apache.commons.text.TextStringBuilder;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -18,7 +17,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -190,7 +188,7 @@ public class Ini {
      * @param key the key in the section
      * @return true if the section and section key exists, false otherwise
      */
-    public boolean has(final String section, final String key) {
+    public boolean hasKey(final String section, final String key) {
         return (resultMap.containsKey(section) && resultMap.get(section).containsKey(key));
     }
     

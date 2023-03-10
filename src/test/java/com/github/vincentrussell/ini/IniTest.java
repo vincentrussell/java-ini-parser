@@ -115,6 +115,14 @@ public class IniTest {
     }
 
     @Test
+    public void hasKey() throws IOException {
+        Ini ini = new Ini();
+        ini.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/sample.ini"));
+        assertEquals("Hello", ini.getValue("String", "string"));
+        assertTrue(ini.hasKey("String", "user"));
+    }
+
+    @Test
     public void putValues() throws IOException {
         Ini ini = new Ini();
         ini.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/sample.ini"));

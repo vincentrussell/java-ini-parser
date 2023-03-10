@@ -50,6 +50,15 @@ Add a dependency to `com.github.vincentrussell:java-ini-parser`.
  Object value = ini.getValue("String", "string")
 ```
 
+### Has a key
+
+```
+ Ini ini = new Ini();
+ ini.load(new FileInputStream("samples/sample2.ini"));
+ boolean has = ini.hasKey("String", "string")
+```
+
+
 ### Get a section as Map
 
 ```
@@ -150,7 +159,7 @@ envVarKey=value is ${ENV_VAR1}
 
 **Enhancements:**
 
-- N/A
+- added hasKey function
 
 **Bugs:**
 
