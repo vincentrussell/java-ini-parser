@@ -321,7 +321,7 @@ public class IniTest {
 
         StringWriter writer = new StringWriter();
         ini.store(writer , "");
-        assertEquals("#\n" +
+        assertEquals(normalizeNewlines("#\n" +
                 "[z]\n" +
                 "z = 1\n" +
                 "y = 1\n" +
@@ -336,7 +336,11 @@ public class IniTest {
                 "z = 1\n" +
                 "y = 1\n" +
                 "x = 1\n" +
-                "\n", writer.toString());
+                "\n"), normalizeNewlines(writer.toString()));
+    }
+
+    private String normalizeNewlines(String string) {
+        return string.replaceAll("\\r\\n?", "\n");
     }
 
 
