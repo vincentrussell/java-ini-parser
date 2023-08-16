@@ -377,10 +377,15 @@ public class Ini {
 
     private static void writeComments(final BufferedWriter bw, final String comments)
             throws IOException {
-        if (comments !=null ) {
-            bw.write("#");
-            IOUtils.write(comments, bw);
-            bw.newLine();
+        if (StringUtils.isNotEmpty(comments)) {
+            try (BufferedReader bufferedReader = new BufferedReader(new StringReader(comments))) {
+                String line = null;
+                while((line = bufferedReader.readLine()) != null) {
+                    bw.write("#");
+                    IOUtils.write(line, bw);
+                    bw.newLine();
+                }
+            }
         }
     }
 

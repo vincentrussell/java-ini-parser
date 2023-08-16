@@ -9,6 +9,7 @@ import org.junit.rules.TemporaryFolder;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -148,6 +149,20 @@ public class IniTest {
         assertEquals("Hello2", ini2.getValue("String", "string2"));
         assertEquals(Double.valueOf("3.12315"), ini2.getValue("Numbers", "double2"));
 
+    }
+
+    @Test
+    public void storeWithMultipleLinesInComments() throws IOException {
+        Ini ini = new Ini();
+        ini.putValue("section0", "hello", "world");
+        StringWriter writer = new StringWriter();
+        ini.store(writer, "Test" + System.lineSeparator() + "[section1]" + System.lineSeparator() + "test=123");
+        assertEquals("#Test\n" +
+                "#[section1]\n" +
+                "#test=123\n" +
+                "[section0]\n" +
+                "hello = world\n" +
+                "\n", writer.toString());
     }
 
     @Test
@@ -321,8 +336,7 @@ public class IniTest {
 
         StringWriter writer = new StringWriter();
         ini.store(writer , "");
-        assertEquals(normalizeNewlines("#\n" +
-                "[z]\n" +
+        assertEquals(normalizeNewlines("[z]\n" +
                 "z = 1\n" +
                 "y = 1\n" +
                 "x = 1\n" +
