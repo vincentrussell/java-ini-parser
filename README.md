@@ -155,6 +155,13 @@ envVarKey=value is ${ENV_VAR1}
 
 # Change Log
 
+## [1.6](https://github.com/vincentrussell/java-ini-parser/tree/java-ini-parser-1.6) (TBD)
+
+**Bugs:**
+
+- Fixed issues with writing out multiline comments
+
+
 ## [1.5](https://github.com/vincentrussell/java-ini-parser/tree/java-ini-parser-1.5) (2023-03-10)
 
 **Enhancements:**
