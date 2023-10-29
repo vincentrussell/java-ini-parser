@@ -10,7 +10,7 @@ Add a dependency to `com.github.vincentrussell:java-ini-parser`.
 <dependency>
    <groupId>com.github.vincentrussell</groupId>
    <artifactId>java-ini-parser</artifactId>
-   <version>1.5</version>
+   <version>1.6</version>
 </dependency>
 ```
 
@@ -177,7 +177,7 @@ envVarKey=value is ${ENV_VAR1}
 
 # Change Log
 
-## [1.6](https://github.com/vincentrussell/java-ini-parser/tree/java-ini-parser-1.6) (TBD)
+## [1.6](https://github.com/vincentrussell/java-ini-parser/tree/java-ini-parser-1.6) (2023-10-28)
 
 **Enhancements:**
 
