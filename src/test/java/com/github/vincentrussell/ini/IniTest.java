@@ -405,4 +405,40 @@ public class IniTest {
             System.getProperties().remove("some.sys.property");
         }
     }
+
+    @Test
+    public void mergeIni() throws IOException {
+        Ini ini = new Ini();
+        ini.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/sample.ini"));
+
+        Ini ini2 = new Ini();
+        ini2.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/sample.ini"));
+        ini2.putValue("Char", "charKey", "b");
+        ini2.putValue("Char", "characterKey", "z");
+        ini2.putValue("String", "string", "Hello");
+        ini2.putValue("String", "user2", "Henry2");
+        ini.merge(ini2);
+
+        assertEquals("Henry2", ini.getValue("String", "user2"));
+        assertEquals("b", ini.getValue("Char", "charKey"));
+        assertEquals("z", ini.getValue("Char", "characterKey"));
+    }
+
+    @Test
+    public void putSection() throws IOException {
+        Ini ini = new Ini();
+        ini.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/sample.ini"));
+
+        Ini ini2 = new Ini();
+        ini2.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/sample.ini"));
+        ini2.putValue("Char", "charKey", "b");
+        ini2.putValue("Char", "characterKey", "z");
+        ini2.putValue("String", "string", "Hello");
+        ini2.putValue("String", "user2", "Henry2");
+        ini.putValues("Char", ini2.getSection("Char"));
+
+        assertEquals("Henry", ini.getValue("String", "user"));
+        assertEquals("b", ini.getValue("Char", "charKey"));
+        assertEquals("z", ini.getValue("Char", "characterKey"));
+    }
 }

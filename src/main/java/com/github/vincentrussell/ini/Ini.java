@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
@@ -75,6 +76,22 @@ public class Ini {
      */
     public void load(final String string) throws  IOException {
         load(new ByteArrayInputStream(string.getBytes(StandardCharsets.UTF_8)));
+    }
+
+    /**
+     * merge this {@link Ini} with another {@link Ini}.  If there are any merge conflicts the passed in {@link Ini}
+     * will take precedence.
+     * @param ini  the ini to merge
+     */
+    public void merge(final Ini ini) {
+        Collection<String> sectionKeys = firstNonNull(ini.getSections(), Collections.emptyList());
+        for (String sectionKey : sectionKeys) {
+            Map<String, Object> section = firstNonNull(ini.getSection(sectionKey), Collections.emptyMap());
+            Set<Map.Entry<String, Object>> entrySet = section.entrySet();
+            for (Map.Entry<String, Object> entry : entrySet ) {
+                putValue(sectionKey, entry.getKey(), entry.getValue());
+            }
+        }
     }
 
     private void parseIniFile(final MutableObject<String> section,
@@ -335,6 +352,14 @@ public class Ini {
      */
     public void putValue(final String section, final String key, final Object value) {
         resultMap.computeIfAbsent(section, s -> new LinkedHashMap<>()).put(key, value);
+    }
+
+    /**
+     * put multiple key/value pairs into a section.
+     * @param sectionEntries
+     */
+    public void putValues(final String sectionKey, Map<String, Object> sectionEntries) {
+        resultMap.computeIfAbsent(sectionKey, s -> new LinkedHashMap<>()).putAll(sectionEntries);
     }
 
     /**

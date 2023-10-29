@@ -83,6 +83,28 @@ Be careful!  Precision can be lost here.
  ini.putValue("section", "key", "value")
 ```
 
+### Put multiple key/value pairs into a section
+
+```
+ Ini ini = new Ini();
+ Ini ini2 = new Ini();
+ ini2.putValue("Char", "charKey", "b");
+ ini2.putValue("Char", "characterKey", "z");
+ ini2.putValue("String", "string", "Hello");
+ ini.putValues("Char", ini2.getSection("Char"));
+```
+
+### Merge two ini files
+
+```
+ Ini ini = new Ini();
+ Ini ini2 = new Ini();
+ ini2.putValue("String", "user2", "Henry2");
+ ini.merge(ini2);
+```
+
+
+
 ### Write ini to file
 
 ```
@@ -156,6 +178,11 @@ envVarKey=value is ${ENV_VAR1}
 # Change Log
 
 ## [1.6](https://github.com/vincentrussell/java-ini-parser/tree/java-ini-parser-1.6) (TBD)
+
+**Enhancements:**
+
+- added the ability to merge two Ini files
+- added the ability to put an entire map into an ini section (merge section)
 
 **Bugs:**
 
