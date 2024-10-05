@@ -177,6 +177,16 @@ envVarKey=value is ${ENV_VAR1}
 
 # Change Log
 
+## [1.7](https://github.com/vincentrussell/java-ini-parser/tree/java-ini-parser-1.7) (2024-10-05)
+
+**Enhancements:**
+
+- N/A
+
+**Bugs:**
+
+- Fixed null pointer exception when using getValue with casting
+
 ## [1.6](https://github.com/vincentrussell/java-ini-parser/tree/java-ini-parser-1.6) (2023-10-28)
 
 **Enhancements:**
