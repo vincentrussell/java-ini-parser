@@ -233,6 +233,9 @@ public class Ini {
 
     @SuppressWarnings("unchecked")
     private <T> T cast(final Object o, final Class<T> type) {
+        if (o == null) {
+            return null;
+        }
         if (type.isInstance(o)) {
             return (T) o;
         } else if (String.class.equals(type)) {

@@ -74,6 +74,7 @@ public class IniTest {
         ini.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/sample.ini"));
         assertTrue(ini.getValue("Boolean", "trueKey", boolean.class));
         assertFalse(ini.getValue("Boolean", "falseKey", Boolean.class));
+        assertNull(ini.getValue("Boolean", "NOT_FOUND", Boolean.class));
     }
 
     @Test
@@ -112,6 +113,7 @@ public class IniTest {
         ini.load(Thread.currentThread().getContextClassLoader().getResourceAsStream("samples/sample.ini"));
         assertEquals("Hello", ini.getValue("String", "string"));
         assertEquals("Henry", ini.getValue("String", "user"));
+        assertNull(ini.getValue("String", "NOT_FOUND_sdfadfdsafd", String.class));
     }
 
     @Test
